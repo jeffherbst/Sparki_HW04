@@ -37,7 +37,22 @@ class ParticleFilter:
             Args:
                 surf: surface to draw on
         """
-        pass
+        #grey color for circle
+        color = (128,128,128)
+
+        #size of circle
+        radius = 2
+        
+        #number of particles
+        arraySize = self.num_particles - 1
+        
+        #loop and draw all 200 particles
+        for x in range(0, arraySize):
+            #print(x)
+            xPosition = self.particles[x,0]
+            yPosition = self.particles[x,1]
+            position = [xPosition, yPosition]
+            pygame.draw.circle(surf, color, position, radius)
 
     def generate(self,time_delta):
         """ Update particles by sampling from the motion model.
