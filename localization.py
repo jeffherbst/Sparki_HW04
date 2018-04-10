@@ -79,7 +79,7 @@ class MyFrontEnd(FrontEnd):
             self.robot.sonar_distance = self.sparki.dist
         
         # update particles
-        self.particle_filter.generate(time_delta)
+        self.particle_filter.sample_motion_model(time_delta)
         self.particle_filter.update()
         self.particle_filter.sample()
         

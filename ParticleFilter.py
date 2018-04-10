@@ -54,12 +54,34 @@ class ParticleFilter:
             position = [xPosition, yPosition]
             pygame.draw.circle(surf, color, position, radius)
 
-    def generate(self,time_delta):
+    def sample_motion_model(self,time_delta):
         """ Update particles by sampling from the motion model.
             Arguments:
                 time_delta: time elapsed since last update
+            Returns:
+                T_motion transform matrix
         """
-        pass
+        #current velocities
+        random_lin = np.random.normal(0,1)
+        random_ang = np.random.normal(0,1)
+        #print(random1, random2)
+        lin_vel = self.robot.lin_vel + random_lin
+        ang_vel = self.robot.ang_vel + random_ang
+
+
+        if lin_vel == 0: #pure linear
+            T_motion = transform(lin_vel * time_delta, 0, 0)
+        elif ang_vel == 0: #pure rotational
+            T_motion = transform(0, 0, ang_vel * time_delta)
+        else: #ICC movement
+            R = lin_vel / ang_vel
+            T_motion = transform(0, R, 0)
+            T_motion = T_motion * transform(0, 0, ang_vel * time_delta)
+            T_motion = T_motion * transform(0, -R, 0)
+
+        
+        return T_motion
+        
 
     def update(self):
         """ Update particle weights according to the rangefinder reading. """
